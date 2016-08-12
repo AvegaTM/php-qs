@@ -1,4 +1,10 @@
 <?php
-echo("<h1>Test</h1>");
+    require_once("database.php");
+    require_once("Models/articles.php");
+
+    $link = db_connect();
+    $articles = articles_all( $link );
+
+    include("views/articles.php");
 
 ?>
