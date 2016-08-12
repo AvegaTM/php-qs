@@ -11,3 +11,21 @@ h3
     background-color: bisque;
     border: 1px solid rad;
 }
+table.admin-table
+{
+    margin: 32px 8px;
+    width: 98%;
+}
+td.date
+{
+    width: 100px;
+}
+td.headofart{}
+td.edit
+{
+    width: 120px;
+}
+td.remove
+{
+    width: 70px;
+}

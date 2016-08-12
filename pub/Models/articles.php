@@ -32,9 +32,71 @@ function articles_get( $link, $id_article )
     return $articles;
 }
 
-function articles_new( $title, $date, $content ){}
+function articles_new( $link, $title, $date, $content )
+{
+    $title = trim( $title );
+    $content = trim( $content );
+    
+    if( $title == '' )
+        return false;
+    
+    $t = "INSERT INTO articles (title, date, content) VALUE ('%s', '%s', '%s')";
+    
+    $query = sprintf( $t, mysqli_real_escape_string( $link, $title ), mysqli_real_escape_string( $link, $date ), mysqli_real_escape_string( $link, $content ) );
+    
+    $result = mysqli_query( $link, $query );
+    
+    if( !$result )
+        die( mysqli_error( $link ) );
+    
+    return true;
+}
 
-function articles_edit( $id, $title, $date, $content ){}
+function articles_edit( $link, $id, $title, $date, $content )
+{
+    $title = trim( $title );
+    $date = trim( $date );
+    $content = trim( $content );
+    $id = (int)trim( $id );
+    
+    if( $title == "" )
+        return false;
+    
+    $sql = "UPDATE `articles` SET `title`='%s', `content`='%s', `date`='%s' WHERE `id`='%d'";
+    
+    $query = sprintf( $sql, mysqli_real_escape_string( $link, $title ), mysqli_real_escape_string( $link, $content ), mysqli_real_escape_string( $link, $date ), $id );
+    
+    syslog( LOG_WARNING, "-=[PHP-QS]=-   query = ".$query );
+    
+    $result = mysqli_query( $link, $query );
+    
+    if( !$result )
+        die( mysqli_error( $link ) );
+    
+    $numrow =  mysqli_affected_rows( $link );
+    //syslog( LOG_WARNING, "-=[PHP-QS]=-   edit = ".$numrow );
+    
+    return $numrow;
+}
 
-function articles_delete( $id ){}
+function articles_delete( $link, $id )
+{
+    $id = (int)trim( $id );
+    if( $id == 0 )
+        return false;
+    
+    $query = sprintf( "DELETE FROM articles WHERE id='%d'", $id );
+    $result = mysqli_query( $link, $query );
+    
+    if( !$result )
+        die( mysqli_error( $link ) );
+    
+    return mysqli_affected_rows( $link );
+}
+
+function articles_intro( $text, $length=500 )
+{
+    return mb_substr( $text, 0, $length );
+}
+    
 ?>
